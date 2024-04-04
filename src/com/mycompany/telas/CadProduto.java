@@ -31,7 +31,15 @@ public class CadProduto extends javax.swing.JFrame {
     
     public void verificarDadosTemporarios(){
         if(Temp.tempObj != null){
-            JOptionPane.showMessageDialog(null, "Tem dados temporários.");
+            Produto p = (Produto) Temp.tempObj;
+            
+            jtfId.setText(String.valueOf(p.getId()));
+            jtfDescricao.setText(p.getDescricao());
+            jtfPreco.setText(String.valueOf(p.getPreco()));
+            
+            btnSalvar.setText("Alterar");
+        }else{
+            btnSalvar.setText("Salvar");
         }
     }
     
@@ -275,7 +283,7 @@ public class CadProduto extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try{
-            cadastrar(jtfDescricao.getText(), Double.parseDouble(jtfPreco.getText()), MemoryDatabase.listaProdutos);
+            cadastrar(jtfDescricao.getText(), Double.parseDouble(jtfPreco.getText().replace(",", ".")), MemoryDatabase.listaProdutos);
             
             jtaProdutos.setText("");
             for(Produto p : MemoryDatabase.listaProdutos){
