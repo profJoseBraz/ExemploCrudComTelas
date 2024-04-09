@@ -15,6 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -34,8 +35,14 @@ public class ListProduto extends javax.swing.JFrame {
     }
 
     public void listar(ArrayList<Produto> lista){
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tableProdutos.getModel();
+        
+        tableProdutos.setModel(defaultTableModel);
+        
+        defaultTableModel.setRowCount(0);
         for(Produto p : lista){
-            jtaListProduto.append(p.toString() + "\n");
+            //jtaListProduto.append(p.toString() + "\n");;
+            defaultTableModel.addRow(new Object[]{p.getId(), p.getDescricao(), p.getPreco()});
         }
     };
     
@@ -50,10 +57,10 @@ public class ListProduto extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jtfFiltro = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtaListProduto = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jcbFiltro = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableProdutos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -61,15 +68,6 @@ public class ListProduto extends javax.swing.JFrame {
                 formWindowClosed(evt);
             }
         });
-
-        jtaListProduto.setColumns(20);
-        jtaListProduto.setRows(5);
-        jtaListProduto.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jtaListProdutoMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jtaListProduto);
 
         jButton1.setText("Filtrar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -80,18 +78,31 @@ public class ListProduto extends javax.swing.JFrame {
 
         jcbFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "DESCRIÇÃO", "PREÇO MAIOR OU IGUAL A", "PREÇO MENOR OU IGUAL A" }));
 
+        tableProdutos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID", "DESCRIÇÃO", "PREÇO"
+            }
+        ));
+        jScrollPane2.setViewportView(tableProdutos);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jcbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtfFiltro)
+                        .addComponent(jtfFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -105,7 +116,7 @@ public class ListProduto extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jcbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -164,45 +175,16 @@ public class ListProduto extends javax.swing.JFrame {
                     break;
             }
             
-            jtaListProduto.setText("");
+            /*jtaListProduto.setText("");;
             for(Produto p : produtosFiltrados){
                 jtaListProduto.append(p.toString() + "\n");
-            }
+            }*/
         }catch(NoSuchElementException e){
             JOptionPane.showMessageDialog(null, "Elemento não encontrado.");
         }catch(NumberFormatException e){
             JOptionPane.showMessageDialog(null, "Digite um valor numérico.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jtaListProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtaListProdutoMouseClicked
-        try{
-            Point pontoCique = evt.getPoint();
-            int posCursor = jtaListProduto.viewToModel(pontoCique);
-            int linha = jtaListProduto.getLineOfOffset(posCursor);
-
-            System.out.println("Clicked on line: " + linha);
-            
-            Produto selProd = MemoryDatabase.listaProdutos.get(linha);
-            
-            Temp.tempObj = selProd;
-            
-            JOptionPane.showMessageDialog(null, (Produto) Temp.tempObj);
-            
-            if(Formularios.cadProduto == null){
-                CadProduto cadProduto = new CadProduto();
-                Formularios.cadProduto = cadProduto;
-                Formularios.cadProduto.setVisible(true);
-                
-                ((CadProduto) Formularios.cadProduto).verificarDadosTemporarios();
-            }else{
-                Formularios.cadProduto.setVisible(true);
-                ((CadProduto) Formularios.cadProduto).verificarDadosTemporarios();
-            }
-        }catch(Exception e){
-        
-        }
-    }//GEN-LAST:event_jtaListProdutoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -242,9 +224,9 @@ public class ListProduto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JComboBox<String> jcbFiltro;
-    private javax.swing.JTextArea jtaListProduto;
     private javax.swing.JTextField jtfFiltro;
+    private javax.swing.JTable tableProdutos;
     // End of variables declaration//GEN-END:variables
 }
