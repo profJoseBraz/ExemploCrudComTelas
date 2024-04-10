@@ -4,7 +4,10 @@
  */
 package com.mycompany.telas;
 
+import com.mycompany.bd.MemoryDatabase;
 import com.mycompany.outros.Formularios;
+import com.mycompany.produto.Produto;
+import javax.swing.JFrame;
 
 /**
  *
@@ -21,6 +24,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         
         setExtendedState(MAXIMIZED_BOTH);
+        
+        MemoryDatabase.carregarDadosExemplo();
     }
 
     /**
@@ -39,6 +44,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Programador de sistemas - Exemplo Crud com interfaces - v1 - 2024");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -98,6 +104,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             Formularios.cadProduto = new CadProduto();
         
         Formularios.cadProduto.setVisible(true);
+        Formularios.cadProduto.setExtendedState(JFrame.NORMAL);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -105,6 +112,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             Formularios.listProduto = new ListProduto();
         
         Formularios.listProduto.setVisible(true);
+        Formularios.listProduto.setExtendedState(JFrame.NORMAL);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**

@@ -8,12 +8,11 @@ import com.mycompany.bd.MemoryDatabase;
 import com.mycompany.outros.Formularios;
 import com.mycompany.outros.Temp;
 import com.mycompany.produto.Produto;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -32,6 +31,8 @@ public class ListProduto extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         
         listar(MemoryDatabase.listaProdutos);
+        
+        verificarOpcaoFiltro();
     }
 
     public void listar(ArrayList<Produto> lista){
@@ -41,10 +42,18 @@ public class ListProduto extends javax.swing.JFrame {
         
         defaultTableModel.setRowCount(0);
         for(Produto p : lista){
-            //jtaListProduto.append(p.toString() + "\n");;
             defaultTableModel.addRow(new Object[]{p.getId(), p.getDescricao(), p.getPreco()});
         }
     };
+    
+    private void verificarOpcaoFiltro(){
+        if(jcbFiltro.getSelectedIndex() == 0){
+            jtfFiltro.setEnabled(false);
+            jtfFiltro.setText("");
+        }else{
+            jtfFiltro.setEnabled(true);
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,6 +72,7 @@ public class ListProduto extends javax.swing.JFrame {
         tableProdutos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Listagem de produtos");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -76,7 +86,12 @@ public class ListProduto extends javax.swing.JFrame {
             }
         });
 
-        jcbFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "DESCRIÇÃO", "PREÇO MAIOR OU IGUAL A", "PREÇO MENOR OU IGUAL A" }));
+        jcbFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ID", "DESCRIÇÃO", "PREÇO MAIOR OU IGUAL A", "PREÇO MENOR OU IGUAL A" }));
+        jcbFiltro.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcbFiltroItemStateChanged(evt);
+            }
+        });
 
         tableProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -88,7 +103,20 @@ public class ListProduto extends javax.swing.JFrame {
             new String [] {
                 "ID", "DESCRIÇÃO", "PREÇO"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableProdutosMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tableProdutos);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -102,7 +130,7 @@ public class ListProduto extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jcbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtfFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                        .addComponent(jtfFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -116,7 +144,7 @@ public class ListProduto extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jcbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -145,46 +173,66 @@ public class ListProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        Optional<Produto> prod = BD.listaProdutos.stream().filter(p -> p.getId() == Integer.valueOf(jtfFiltro.getText())).findFirst();
-        
         List<Produto> produtosFiltrados = null; 
-
-        Optional<Produto> prod = null;
         
         try{
             switch (jcbFiltro.getSelectedIndex()) {
                 case 0:
+                    produtosFiltrados = MemoryDatabase.listaProdutos;
+                    break;
+                case 1:
                     produtosFiltrados = MemoryDatabase.listaProdutos.stream()
                         .filter(p -> p.getId() == Integer.parseInt(jtfFiltro.getText()))
                         .collect(Collectors.toList());
                     break;
-                case 1:
+                case 2:
                     produtosFiltrados = MemoryDatabase.listaProdutos.stream()
-                        .filter(p -> p.getDescricao().contains(jtfFiltro.getText()))
+                        .filter(p -> p.getDescricao().toLowerCase().contains(jtfFiltro.getText().toLowerCase()))
                         .collect(Collectors.toList());
                     break;
-                case 2:
+                case 3:
                     produtosFiltrados = MemoryDatabase.listaProdutos.stream()
                         .filter(p -> p.getPreco() >= Double.parseDouble(jtfFiltro.getText()))
                         .collect(Collectors.toList());
                     break;
-                case 3:
+                case 4:
                     produtosFiltrados = MemoryDatabase.listaProdutos.stream()
                         .filter(p -> p.getPreco() <= Double.parseDouble(jtfFiltro.getText()))
                         .collect(Collectors.toList());
                     break;
             }
             
-            /*jtaListProduto.setText("");;
-            for(Produto p : produtosFiltrados){
-                jtaListProduto.append(p.toString() + "\n");
-            }*/
+            ArrayList<Produto> prodFilt = new ArrayList<>(produtosFiltrados);
+            listar(prodFilt);
         }catch(NoSuchElementException e){
             JOptionPane.showMessageDialog(null, "Elemento não encontrado.");
         }catch(NumberFormatException e){
             JOptionPane.showMessageDialog(null, "Digite um valor numérico.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tableProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProdutosMouseClicked
+        if (evt.getClickCount() == 2){
+            Produto produto = new Produto();
+
+            produto.setId(Integer.parseInt(String.valueOf(tableProdutos.getValueAt(tableProdutos.getSelectedRow(), 0))));
+            produto.setDescricao(String.valueOf(tableProdutos.getValueAt(tableProdutos.getSelectedRow(), 1)));
+            produto.setPreco(Double.valueOf(String.valueOf(tableProdutos.getValueAt(tableProdutos.getSelectedRow(), 2))));
+
+            Temp.tempObj = produto;
+
+            if(Formularios.cadProduto == null)
+                Formularios.cadProduto = new CadProduto();
+                
+            ((CadProduto) Formularios.cadProduto).verificarDadosTemporarios();
+            Formularios.cadProduto.setVisible(true);
+            Formularios.cadProduto.setExtendedState(JFrame.NORMAL);
+        }
+    }//GEN-LAST:event_tableProdutosMouseClicked
+
+    private void jcbFiltroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbFiltroItemStateChanged
+        verificarOpcaoFiltro();
+    }//GEN-LAST:event_jcbFiltroItemStateChanged
 
     /**
      * @param args the command line arguments
