@@ -38,4 +38,5 @@ Este projeto exemplifica as seguintes funcionalidades:
 
 Antes de executar o projeto, certifique-se de ter o seguinte instalado:
 
+- NetBeans IDE v18 ou +
 - JDK (Java Development Kit) 8 ou superior.
