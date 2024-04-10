@@ -7,13 +7,22 @@ Este repositório contém um projeto de exemplo que demonstra como implementar o
 O projeto está organizado da seguinte maneira:
 
 - **src/**: Contém todo o código-fonte do projeto.
-  - **com.example.crud**: Pacote principal do projeto.
-    - **model/**: Classes que representam os objetos do modelo de dados.
-    - **dao/**: Classes que encapsulam a lógica de acesso aos dados.
-    - **view/**: Classes que definem as interfaces gráficas utilizando Swing.
-    - **controller/**: Classes que coordenam a interação entre a interface gráfica e a lógica de negócios.
-    - **Main.java**: Ponto de entrada da aplicação.
-
+  - **com.mycompany.bd**
+    - **Arquivos**
+      - **MemoryDatabase.java**: Classe que representa o "banco de dados" da aplicação. Contém a referência a um ArrayList estático que será acessado para realizar as operações do crud, ou seja, **inserir**, **alterar**, **deletar** ou **listar**.
+  - **com.mycompany.outros**
+     - **Arquivos**
+      - **Formularios.java**: Classe que contém variáveis de referência aos formulários que serão utilizados durante a execução do programa. Essas variáveis servem para guardar instâncias, ou seja, objetos das telas que foram abertas.
+      - **Temp.java**: Classe que contém uma variável de referencia que servirá para guardar um objeto que será manipulado, isto é, alterado ou deletado.
+  - **com.mycompany.produto**
+     - **Arquivos**
+      - **Produto.java**: Representa o modelo de um produto, objeto principal da aplicação. Nessa classe estão contidas as propriedades (privadas) bem como os métodos *gettes* e *setters*; *equals* e *hashCode*; e *toString*.
+  - **com.mycompany.telas**
+     - **Arquivos**
+      - **cadProduto.java**: Classe que representará a tela de cadastro.
+      - **ListProduto.java**: Classe que representará a tela de listagem/pesquisa.
+      - **MenuPrincipal.java**: Classe que representará o menu principal da aplicação.
+  
 ## Funcionalidades
 
 Este projeto exemplifica as seguintes funcionalidades:
