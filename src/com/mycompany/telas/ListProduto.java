@@ -38,7 +38,7 @@ public class ListProduto extends javax.swing.JFrame {
     public void listar(ArrayList<Produto> lista){
         DefaultTableModel defaultTableModel = (DefaultTableModel) tableProdutos.getModel();
         
-        //tableProdutos.setModel(defaultTableModel);;
+        //tableProdutos.setModel(defaultTableModel);
         
         defaultTableModel.setRowCount(0);
         for(Produto p : lista){
