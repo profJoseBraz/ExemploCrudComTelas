@@ -81,7 +81,9 @@ public class CadProduto extends javax.swing.JFrame {
         try{
             Produto prodAlt = new Produto(p.getId(), descricao, Double.parseDouble(preco));
             
-            lista.set(p.getId(), prodAlt);
+            int index = lista.indexOf(Temp.tempObj);
+            
+            lista.set(index, prodAlt);
             JOptionPane.showMessageDialog(null, "Produto " + p.getDescricao() + " alterado com sucesso.");
             jtfDescricao.setText("");
             jtfPreco.setText("");
