@@ -42,10 +42,12 @@ public class CadProduto extends javax.swing.JFrame {
             btnSalvar.setText("Alterar");
             btnExcluir.setVisible(true);
             btnCancelar.setVisible(true);
+            setTitle("Alteração de produto");
         }else{
             btnSalvar.setText("Salvar");
             btnExcluir.setVisible(false);
             btnCancelar.setVisible(false);
+            setTitle("Cadastro de produto");
         }
     }
     
@@ -56,6 +58,7 @@ public class CadProduto extends javax.swing.JFrame {
             jtfId.setText("0");
         }
     }
+    
     
     private void cadastrar(String descricao, String preco, ArrayList<Produto> lista){
         try{
@@ -239,7 +242,7 @@ public class CadProduto extends javax.swing.JFrame {
             
             verificarDadosTemporarios();
         }else{
-            alterar(((Produto) Temp.tempObj), jtfDescricao.getText(), jtfPreco.getText().replace(",", "."), MemoryDatabase.listaProdutos);
+            alterar((Produto) Temp.tempObj, jtfDescricao.getText(), jtfPreco.getText().replace(",", "."), MemoryDatabase.listaProdutos);
             
             if(Formularios.listProduto != null)
                 ((ListProduto) Formularios.listProduto).listar(MemoryDatabase.listaProdutos);
@@ -272,7 +275,14 @@ public class CadProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        jtfDescricao.setText("");
+        jtfPreco.setText("");
+        
+        Temp.limpar();
+
+        verificarDadosTemporarios();
+
+        proximoId();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
