@@ -19,7 +19,7 @@ O projeto está organizado da seguinte maneira:
       - **Produto.java**: Representa o modelo de um produto, objeto principal da aplicação. Nessa classe estão contidas as propriedades (privadas) bem como os métodos *gettes* e *setters*; *equals* e *hashCode*; e *toString*.
   - **com.mycompany.telas**
     - **Arquivos**
-      - **cadProduto.java**: Classe que representará a tela de cadastro.
+      - **CadProduto.java**: Classe que representará a tela de cadastro.
       - **ListProduto.java**: Classe que representará a tela de listagem/pesquisa.
       - **MenuPrincipal.java**: Classe que representará o menu principal da aplicação.
   
